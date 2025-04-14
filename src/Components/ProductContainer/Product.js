@@ -1,10 +1,25 @@
 import React, { useContext, useState } from "react";
 import "./Product.css";
 import { MyContext as ProductContext } from "../../Context/MyContext";
+
 function Product() {
   const product = useContext(ProductContext);
-//  const [cart,setCart] = useState([]) 
 
+  const [cart, setCart] = useState([]);
+
+  const addToCart = (productId) => {
+    const matchingItem = cart.find((item) => item.id === productId);
+
+
+    if (matchingItem) {
+      matchingItem.quantity += 1;
+    } else {
+      setCart([...cart, { id: productId, quantity: 1 }]);
+  
+    }
+  };
+
+  console.log(cart);
   return (
     <div>
       <main class="product-container">
@@ -40,7 +55,10 @@ function Product() {
             <div className="spacer"></div>
             <button
               className="add-to-cart js-add-to-cart"
-               >
+              onClick={() => {
+                addToCart(item.id);
+              }}
+            >
               Add to Cart
             </button>
           </div>
@@ -52,6 +70,3 @@ function Product() {
 
 export default Product;
 
-// const addToCart = (productId) => {
-//   setCart(...cart,productId)
-// }

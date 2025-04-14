@@ -8,11 +8,13 @@ import { MyContext as ProductContext } from './Context/MyContext';
 function App() {
  const [product,setProduct] = useState([])
 
+
+ 
   useEffect(() => {
     fetch('https://fakestoreapi.com/products')
     .then(res => res.json())
     .then(data => setProduct(data))
-    .catch(err => console.error("Fetch error:", err));
+    .catch(err => alert(err));
   },[])
  
   
