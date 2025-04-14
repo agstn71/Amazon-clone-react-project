@@ -1,25 +1,30 @@
-import logo from './logo.svg';
+
+import { createContext, useEffect, useState } from 'react';
 import './App.css';
+import Header from './Components/Header/Header';
+import Product from './Components/ProductContainer/Product';
+import { MyContext as ProductContext } from './Context/MyContext';
 
 function App() {
+ const [product,setProduct] = useState([])
+
+  useEffect(() => {
+    fetch('https://fakestoreapi.com/products')
+    .then(res => res.json())
+    .then(data => setProduct(data))
+    .catch(err => console.error("Fetch error:", err));
+  },[])
+ 
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header/>
+      <ProductContext.Provider value={product}>
+      <Product/>
+      </ProductContext.Provider>
+     
     </div>
-  );
-}
+  )
+};
 
 export default App;
