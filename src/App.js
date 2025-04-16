@@ -1,32 +1,22 @@
 
-import { createContext, useEffect, useState } from 'react';
-import './App.css';
-import Header from './Components/Header/Header';
-import Product from './Components/ProductContainer/Product';
-import { MyContext as ProductContext } from './Context/MyContext';
+import "./App.css";
+import Main from "./Components/MainPage/Main";
+import { BrowserRouter as Router,Route,Routes } from "react-router-dom";
+import CheckOut from "./Components/CheckOut/CheckOut";
 
 function App() {
- const [product,setProduct] = useState([])
-
-
- 
-  useEffect(() => {
-    fetch('https://fakestoreapi.com/products')
-    .then(res => res.json())
-    .then(data => setProduct(data))
-    .catch(err => alert(err));
-  },[])
- 
   
   return (
     <div className="App">
-      <Header/>
-      <ProductContext.Provider value={product}>
-      <Product/>
-      </ProductContext.Provider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Main/>}/>
+          <Route path="/Checkout" element={<CheckOut/>}/>
+        </Routes>
+      </Router>
      
     </div>
-  )
-};
+  );
+}
 
 export default App;

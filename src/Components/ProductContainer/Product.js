@@ -1,25 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import "./Product.css";
 import { MyContext as ProductContext } from "../../Context/MyContext";
 
-function Product() {
+function Product({ addToCart, selectQuantity }) {
   const product = useContext(ProductContext);
 
-  const [cart, setCart] = useState([]);
-
-  const addToCart = (productId) => {
-    const matchingItem = cart.find((item) => item.id === productId);
-
-
-    if (matchingItem) {
-      matchingItem.quantity += 1;
-    } else {
-      setCart([...cart, { id: productId, quantity: 1 }]);
-  
-    }
-  };
-
-  console.log(cart);
   return (
     <div>
       <main class="product-container">
@@ -28,7 +13,9 @@ function Product() {
             <div className="product-img">
               <img src={item.image} alt="productimage" />
             </div>
-            <div className="product-name">{item.title}</div>
+            <div className="product-name limit-text-to-2-lines">
+              {item.title}
+            </div>
             <div className="rating">
               <img
                 src={`/images/ratings/rating-${
@@ -38,8 +25,9 @@ function Product() {
               />
               <div className="count">{item.rating.count}</div>
             </div>
+            <div className="price">${item.price}</div>
             <div className="product-quantity">
-              <select>
+              <select ref={(el) => (selectQuantity.current[index] = el)}>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -54,9 +42,9 @@ function Product() {
             </div>
             <div className="spacer"></div>
             <button
-              className="add-to-cart js-add-to-cart"
+              className="add-to-cart"
               onClick={() => {
-                addToCart(item.id);
+                addToCart(item.id, index);
               }}
             >
               Add to Cart
@@ -69,4 +57,3 @@ function Product() {
 }
 
 export default Product;
-

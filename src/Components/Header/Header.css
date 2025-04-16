@@ -19,6 +19,7 @@
 
 header form {
     display: flex;
+   
 }
 header form input {
     width:650px;
@@ -36,7 +37,39 @@ header form  button {
     color:white;
 }
 
-.cart-icon a {
+.rtn-ord .returns-text {
+    display:block;
+    font-size: 13px;
+}
+
+.rtn-ord .orders-text {
+    display:block;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.cart-icon {
+    display: block;
+    text-decoration: none;
     display: flex;
     color:white;
+    position: relative;
+    margin-left:13px;
+}
+
+.cart-icon .icon {
+    font-size: 35px;
+}
+
+.cart-icon .cart-quantity {
+  position:absolute;
+  left:17px;
+  color:rgb(255, 216, 20);;
+}
+
+.cart-icon .cart-text {
+    margin-top:12px;
+    font-weight: 700;
+    font-size: 13px;
+
 }

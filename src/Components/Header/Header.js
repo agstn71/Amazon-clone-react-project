@@ -1,8 +1,8 @@
 import React from "react";
-import './Header.css'
+import "./Header.css";
+import { Link } from "react-router-dom";
 
-
-function Header() {
+function Header(props) {
   return (
     <div>
       <header className="amazon-header">
@@ -21,15 +21,15 @@ function Header() {
         </form>
         <div className="amazon-cart">
           <div className="rtn-ord">
-            <span>Return</span>
-            <span>&Orders</span>
+            <span class="returns-text">Return</span>
+            <span class="orders-text">&Orders</span>
           </div>
-          <div className="cart-icon">
-            <a href="/">
-              <i class="fas fa-shopping-cart"></i>
-              <div class="cart-quantity">3</div>
-              <div class="cart-text">Cart</div>
-            </a>
+          <div>
+            <Link to="/Checkout" className="cart-icon">
+            <i class="fas fa-shopping-cart icon"></i>
+            <div class="cart-quantity">{props.quantity}</div>
+            <div class="cart-text">Cart</div>
+            </Link>
           </div>
         </div>
       </header>
