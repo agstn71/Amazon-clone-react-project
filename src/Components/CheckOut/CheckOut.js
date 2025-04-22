@@ -2,17 +2,18 @@ import React, { useContext, useRef } from "react";
 import "./CheckOut.css";
 import { useLocation } from "react-router-dom";
 import { MyContext as MainContext } from "../../Context/MyContext";
+import DeliveryDate from "./DeliveryDate";
+import useDeliveryOption from "../../Utils/useDeliveryOption";
 import dayjs from "dayjs";
+
 
 function Cart() {
   const location = useLocation();
   const quantityElement = useRef({});
   const inputElement = useRef({});
   const {product,cart,setCart,quantity,setQuantity,selectQuantity} = useContext(MainContext)
+ const [deliveryOptions,setDeliveryOptions] = useDeliveryOption()
 
-const today = dayjs();
-const deliveryDate = today.add(7,'days');
-console.log(deliveryDate.format('dddd, MMMM YY'))
   const cartUpdate = (id) => {
     console.log("update button clicked");
     console.log(quantityElement);
@@ -28,7 +29,7 @@ console.log(deliveryDate.format('dddd, MMMM YY'))
         return item.id === productId ? {...item,quantity: quantity}:item
       })
     )
-   
+    
   }
 
   const handleSubmit = (e,id) => {
@@ -66,11 +67,24 @@ console.log(deliveryDate.format('dddd, MMMM YY'))
               const matchingItem = product.find(
                 (product) => product.id === item.id
               );
+              
+               let deliveryOption;
+
+               deliveryOptions.forEach((option) => {
+                 if(option.id === item. deliveryOptionId) {
+                  deliveryOption = option;
+                 }
+               });
+
+            const today = dayjs();
+                   const deliveryDate = today.add(deliveryOption.deliveryDays,'days');
+                   const dateString = deliveryDate.format('dddd, MMMM D');
+
 
               return (
                 <div className="cart-container" key={item.id}>
                   <div className="delivery-date-dis">
-                    Delivery date:Tuesdar, June 21
+                    Delivery date: {dateString}
                   </div>
                   <div className="cart-item-detail">
                     <div className="item-img">
@@ -107,27 +121,9 @@ console.log(deliveryDate.format('dddd, MMMM YY'))
                       <div className="delivery-option-title">
                         Choose a delivery option:
                       </div>
-                      <div className="delivery-option">
-                        <input type="radio" name="delivey-option" />
-                        <div>
-                          <div className="delivery-date">Tuesday,June 21</div>
-                          <div className="delivery-price">FREE Shipping</div>
-                        </div>
-                      </div>
-                      <div className="delivery-option">
-                        <input type="radio" name="delivey-option" />
-                        <div>
-                          <div className="delivery-date">Wednesday,June 15</div>
-                          <div className="delivery-price">$4.99-shipping</div>
-                        </div>
-                      </div>
-                      <div className="delivery-option">
-                        <input type="radio" name="delivey-option" />
-                        <div>
-                          <div className="delivery-date">Monday,June 13</div>
-                          <div className="delivery-price">$9.99-shipping</div>
-                        </div>
-                      </div>
+                      
+                      <DeliveryDate item={item}/>
+                   
                     </div>
                   </div>
                 </div>

@@ -13,7 +13,7 @@ const addToCart = (productId, index, cart, setCart, selectQuantity) => {
           : item;
       });
     } else {
-      return [...cart, { id: productId, quantity: quantityValue }];
+      return [...cart, { id: productId, quantity: quantityValue,deliveryOptionId:'1' }];
     }
   });
 
