@@ -46,6 +46,12 @@ function Cart() {
       })
      )
   }
+  const handleDeliveryOptionChange = (itemId, newOptionId) => {
+          const updatedCart = cart.map((item) => {
+            return (item.id === itemId ? {...item,deliveryOptionId: newOptionId}:item);
+          });
+          setCart(updatedCart);
+  }
   return (
     <div className="cart-main">
       <div className="header">
@@ -122,7 +128,7 @@ function Cart() {
                         Choose a delivery option:
                       </div>
                       
-                      <DeliveryDate item={item}/>
+                      <DeliveryDate item={item} deliveryOptionChange={handleDeliveryOptionChange}/>
                    
                     </div>
                   </div>
