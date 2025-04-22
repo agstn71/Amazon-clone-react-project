@@ -1,15 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import Header from '../Header/Header'
 import Product from '../ProductContainer/Product'
-import { MyContext as ProductContext } from '../../Context/MyContext';
+import { MyContext as MainContext } from '../../Context/MyContext';
 import addToCart from '../../Utils/addToCart';
 
 function Main() {
 
-  const [product, setProduct] = useState([]);
-  const [cart, setCart] = useState([]);
-  const [quantity, setQuantity] = useState();
-  const selectQuantity = useRef([]);
+  const {product,setProduct,cart,setCart,quantity,setQuantity,selectQuantity} = useContext(MainContext)
 
   useEffect(() => {
     fetch("https://fakestoreapi.com/products")
@@ -18,13 +15,10 @@ function Main() {
       .catch((err) => alert(err));
 
       console.log("fetching data");
-      return () => {
-        // 👈 this is the cleanup function (like componentWillUnmount)
-        console.log('Component is unmounting...');
-      };
+      
   }, []);
  
-
+console.log(product)
   useEffect(() => {
     setQuantity(() => {
       return cart.reduce((sum, item) => {
@@ -36,15 +30,15 @@ function Main() {
 
   return (
     <>
-       <Header quantity={quantity} />
-      <ProductContext.Provider value={product}>
+       <Header  />
+
         <Product
           addToCart={(productId, index) => {
             addToCart(productId, index, cart, setCart, selectQuantity);
           }}
-          selectQuantity={selectQuantity}
+          
         />
-      </ProductContext.Provider>
+
     </>
   )
 }

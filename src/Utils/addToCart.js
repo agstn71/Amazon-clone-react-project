@@ -16,6 +16,8 @@ const addToCart = (productId, index, cart, setCart, selectQuantity) => {
       return [...cart, { id: productId, quantity: quantityValue }];
     }
   });
+
+  console.log(cart)
 };
 
 export default addToCart;

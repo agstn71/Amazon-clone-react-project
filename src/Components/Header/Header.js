@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./Header.css";
 import { Link } from "react-router-dom";
+import { MyContext as MainContext } from "../../Context/MyContext";
 
-function Header(props) {
+function Header() {
+ const {product,cart,setCart,quantity,setQuantity,selectQuantity} =  useContext(MainContext)
   return (
     <div>
       <header className="amazon-header">
-        <div className="logo-div">
+        <div  className="logo-div">
           <img
             src="/images/Amazon_logo.svg"
             alt="Amazon Logo"
@@ -27,7 +29,7 @@ function Header(props) {
           <div>
             <Link to="/Checkout" className="cart-icon">
             <i class="fas fa-shopping-cart icon"></i>
-            <div class="cart-quantity">{props.quantity}</div>
+            <div class="cart-quantity">{quantity}</div>
             <div class="cart-text">Cart</div>
             </Link>
           </div>

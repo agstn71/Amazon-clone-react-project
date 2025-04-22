@@ -1,9 +1,10 @@
 import React, { useContext } from "react";
 import "./Product.css";
-import { MyContext as ProductContext } from "../../Context/MyContext";
+import { MyContext as  MainContext } from "../../Context/MyContext";
 
-function Product({ addToCart, selectQuantity }) {
-  const product = useContext(ProductContext);
+
+function Product({ addToCart }) {
+  const {product,cart,setCart,quantity,setQuantity,selectQuantity} = useContext( MainContext);
 
   return (
     <div>
