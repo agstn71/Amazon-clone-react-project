@@ -1,10 +1,12 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext, useRef, useState } from "react";
 import "./CheckOut.css";
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { MyContext as MainContext } from "../../Context/MyContext";
 import DeliveryDate from "./DeliveryDate";
-import useDeliveryOption from "../../Utils/useDeliveryOption";
+import useDeliveryOption from "../../Data/useDeliveryOption";
 import dayjs from "dayjs";
+import { formatCurrency } from "../../Data/money";
+import OrderSummary from "./OrderSummary";
 
 
 function Cart() {
@@ -13,6 +15,9 @@ function Cart() {
   const inputElement = useRef({});
   const {product,cart,setCart,quantity,setQuantity,selectQuantity} = useContext(MainContext)
  const [deliveryOptions,setDeliveryOptions] = useDeliveryOption()
+  
+
+
 
   const cartUpdate = (id) => {
     console.log("update button clicked");
@@ -136,33 +141,8 @@ function Cart() {
               );
             })}
           </div>
-
-          <div className="order-summary">
-            <div className="order-title">Order Summary</div>
-            <div className="payment-summary">
-              <div className="payment-summary-row">
-                <div>Items(3)</div>
-                <div className="payment-summary-price">$42.75</div>
-              </div>
-              <div className="payment-summary-row">
-                <div>Shipping $ handling:</div>
-                <div className="payment-summary-price">$4.99</div>
-              </div>
-              <div className="payment-summary-row">
-                <div>Total before tax:</div>
-                <div className="payment-summary-price">$47.74</div>
-              </div>
-              <div className="payment-summary-row">
-                <div>Estimated tax(10%):</div>
-                <div className="payment-summary-price">$4.77</div>
-              </div>
-            </div>
-            <div className="order-total">
-              <div className="total-title">Order total</div>
-              <div className="total-price">$52.51</div>
-            </div>
-            <button className="place-order-button">Place your order</button>
-          </div>
+          
+          <OrderSummary/>
         </div>
       </div>
     </div>
