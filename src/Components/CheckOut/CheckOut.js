@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import "./CheckOut.css";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { MyContext as MainContext } from "../../Context/MyContext";
@@ -7,33 +7,43 @@ import useDeliveryOption from "../../Data/useDeliveryOption";
 import dayjs from "dayjs";
 import { formatCurrency } from "../../Data/money";
 import OrderSummary from "./OrderSummary";
+import { useDispatch, useSelector } from "react-redux";
+import { updateCart,cartItemDelete } from "../../Redux/CartSlice";
+
 
 
 function Cart() {
+  
   const location = useLocation();
   const quantityElement = useRef({});
   const inputElement = useRef({});
-  const {product,cart,setCart,quantity,setQuantity,selectQuantity} = useContext(MainContext)
+  const {product,quantity,setQuantity} = useContext(MainContext)
  const [deliveryOptions,setDeliveryOptions] = useDeliveryOption()
+ const dispatch = useDispatch();
+ const cart = useSelector((state) => state.cart.cartItem);
+
   
 
 
-
-  const cartUpdate = (id) => {
-    console.log("update button clicked");
-    console.log(quantityElement);
+  const quantityUpdate = (id) => {
+  
     quantityElement.current[id].style.display = "none";
     inputElement.current[id].style.display = "inline";
   };
 
-  const quantityUpdate = (event,id) => {
+  useEffect(() => {
+      setQuantity(() => {
+        return cart.reduce((sum, item) => {
+          return (sum = sum + item.quantity);
+        }, 0);
+      });
+      console.log("cart updated")
+    }, [cart]);
+
+  const onCartUpdate = (event,id) => {
     const quantity = Number(event.target.value);
     const productId = id;
-    setCart(
-      cart.map((item) => {
-        return item.id === productId ? {...item,quantity: quantity}:item
-      })
-    )
+    dispatch(updateCart({productId,quantity}))
     
   }
 
@@ -43,20 +53,11 @@ function Cart() {
     quantityElement.current[id].style.display = "inline";
   }
 
-  const itemDelete = (id) => {
+  const onItemDelete = (id) => {
     const productId = id;
-     setCart(
-      cart.filter((item) => {
-        return item.id !== productId
-      })
-     )
+    dispatch(cartItemDelete({productId}))
   }
-  const handleDeliveryOptionChange = (itemId, newOptionId) => {
-          const updatedCart = cart.map((item) => {
-            return (item.id === itemId ? {...item,deliveryOptionId: newOptionId}:item);
-          });
-          setCart(updatedCart);
-  }
+ 
   return (
     <div className="cart-main">
       <div className="header">
@@ -120,12 +121,12 @@ function Cart() {
                             ref={(el) => (inputElement.current[item.id] = el)}
                             type="text"
                             className="quantity-input"
-                            onChange={ (e) => quantityUpdate(e,item.id)}
+                            onChange={ (e) => onCartUpdate(e,item.id)}
                           />
                           </form>
                         </span>
-                        <span onClick={() => cartUpdate(item.id)}>Update</span>
-                        <span onClick={() => itemDelete(item.id)}>Delete</span>
+                        <span onClick={() => quantityUpdate(item.id)}>Update</span>
+                        <span onClick={() => onItemDelete(item.id)}>Delete</span>
                       </div>
                     </div>
                     <div className="delivery-options">
@@ -133,7 +134,7 @@ function Cart() {
                         Choose a delivery option:
                       </div>
                       
-                      <DeliveryDate item={item} deliveryOptionChange={handleDeliveryOptionChange}/>
+                      <DeliveryDate item={item} />
                    
                     </div>
                   </div>
@@ -142,7 +143,7 @@ function Cart() {
             })}
           </div>
           
-          <OrderSummary/>
+          <OrderSummary quantity={quantity}/>
         </div>
       </div>
     </div>

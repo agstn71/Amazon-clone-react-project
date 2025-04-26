@@ -1,26 +1,33 @@
 
-import "./App.css";
+
 import Main from "./Components/MainPage/Main";
 import { BrowserRouter as Router,Route,Routes } from "react-router-dom";
 import CheckOut from "./Components/CheckOut/CheckOut";
 import { useRef, useState } from "react";
 import { MyContext as MainContext } from "./Context/MyContext";
+import { Provider } from "react-redux";
+import { store } from "./Redux/Store";
+import Orders from "./Order/Orders";
+import "./App.css";
 
 function App() {
     const [product, setProduct] = useState([]);
-    const [cart, setCart] = useState([]);
+ 
     const [quantity, setQuantity] = useState();
-    const selectQuantity = useRef([]);
+    
   
   return (
     <div className="App">
-    <MainContext.Provider value={{product,setProduct,cart,setCart,quantity,setQuantity,selectQuantity}}>
+    <MainContext.Provider value={{product,setProduct,quantity,setQuantity}}>
+      <Provider store={store}>
       <Router>
         <Routes>
           <Route path="/" element={<Main/>}/>
-          <Route path="/Checkout" element={<CheckOut/>}/>
+          <Route path="/checkout" element={<CheckOut/>}/>
+          <Route path="/orders" element={<Orders/>}/>
         </Routes>
       </Router>
+      </Provider>
       </MainContext.Provider>
      
     </div>

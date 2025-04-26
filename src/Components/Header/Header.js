@@ -27,7 +27,7 @@ function Header() {
             <span class="orders-text">&Orders</span>
           </div>
           <div>
-            <Link to="/Checkout" className="cart-icon">
+            <Link to="/checkout" className="cart-icon">
             <i class="fas fa-shopping-cart icon"></i>
             <div class="cart-quantity">{quantity}</div>
             <div class="cart-text">Cart</div>

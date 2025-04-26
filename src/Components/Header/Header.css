@@ -64,7 +64,9 @@ header form  button {
 .cart-icon .cart-quantity {
   position:absolute;
   left:17px;
-  color:rgb(255, 216, 20);;
+  color: rgb(240, 136, 4);
+  font-weight: 700;
+  font-size: 16px;
 }
 
 .cart-icon .cart-text {

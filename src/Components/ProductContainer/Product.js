@@ -1,10 +1,20 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import "./Product.css";
 import { MyContext as  MainContext } from "../../Context/MyContext";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../Redux/CartSlice";
 
 
-function Product({ addToCart }) {
-  const {product,cart,setCart,quantity,setQuantity,selectQuantity} = useContext( MainContext);
+function Product() {
+  const {product,quantity,setQuantity} = useContext(MainContext);
+  const selectQuantity = useRef([]);
+  
+  const dispatch = useDispatch();
+
+ const  onAddToCart = (productId,index) => {
+   const selectedQuantity = Number(selectQuantity.current[index].value);
+    dispatch(addToCart({productId,quantity:selectedQuantity}))
+  }
 
   return (
     <div>
@@ -45,7 +55,7 @@ function Product({ addToCart }) {
             <button
               className="add-to-cart"
               onClick={() => {
-                addToCart(item.id, index);
+               onAddToCart(item.id, index)
               }}
             >
               Add to Cart

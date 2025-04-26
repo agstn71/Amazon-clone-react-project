@@ -2,9 +2,13 @@ import React from "react";
 import { formatCurrency } from "../../Data/money";
 import dayjs from "dayjs";
 import useDeliveryOption from "../../Data/useDeliveryOption";
-function DeliveryDate({ item,deliveryOptionChange}) {
-  const [deliveryOptions, setDeliveryOptions] = useDeliveryOption();
+import { useDispatch } from "react-redux";
+import { deliveryOptionChange } from "../../Redux/CartSlice";
 
+
+function DeliveryDate({ item}) {
+  const [deliveryOptions, setDeliveryOptions] = useDeliveryOption();
+ const dispatch = useDispatch()
   return (
     <>
       {deliveryOptions.map((option, index) => {
@@ -19,7 +23,7 @@ function DeliveryDate({ item,deliveryOptionChange}) {
             <input
               checked={option.id === item.deliveryOptionId}
               type="radio"
-              onChange={() => deliveryOptionChange(item.id, option.id)}
+              onChange={() => dispatch(deliveryOptionChange({productId:item.id, optionId:option.id}))}
               name={`delivary-option-${item.id}`}
             />
             <div>

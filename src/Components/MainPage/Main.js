@@ -3,10 +3,12 @@ import Header from '../Header/Header'
 import Product from '../ProductContainer/Product'
 import { MyContext as MainContext } from '../../Context/MyContext';
 import addToCart from '../../Data/addToCart';
+import { useSelector } from 'react-redux';
 
 function Main() {
 
-  const {product,setProduct,cart,setCart,quantity,setQuantity,selectQuantity} = useContext(MainContext)
+  const {product,setProduct,quantity,setQuantity} = useContext(MainContext)
+  const cart = useSelector((state) => state.cart.cartItem);
 
   useEffect(() => {
     fetch("https://fakestoreapi.com/products")
@@ -32,12 +34,7 @@ console.log(product)
     <>
        <Header  />
 
-        <Product
-          addToCart={(productId, index) => {
-            addToCart(productId, index, cart, setCart, selectQuantity);
-          }}
-          
-        />
+        <Product />
 
     </>
   )
