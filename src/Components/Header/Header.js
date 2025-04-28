@@ -9,11 +9,13 @@ function Header() {
     <div>
       <header className="amazon-header">
         <div  className="logo-div">
+          <Link to="/">
           <img
             src="/images/Amazon_logo.svg"
             alt="Amazon Logo"
             class="amazon-header__logo-img"
           />
+          </Link>
         </div>
         <form action="/search" method="GET" class="amazon-header__search">
           <input type="text" name="q" placeholder="Search" />
@@ -22,10 +24,12 @@ function Header() {
           </button>
         </form>
         <div className="amazon-cart">
+          <Link to="/orders">
           <div className="rtn-ord">
-            <span class="returns-text">Return</span>
-            <span class="orders-text">&Orders</span>
+            <span className="returns-text">Return</span>
+            <span className="orders-text">&Orders</span>
           </div>
+          </Link>
           <div>
             <Link to="/checkout" className="cart-icon">
             <i class="fas fa-shopping-cart icon"></i>

@@ -1,20 +1,19 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef} from "react";
 import "./CheckOut.css";
-import { useLocation, useSearchParams } from "react-router-dom";
 import { MyContext as MainContext } from "../../Context/MyContext";
 import DeliveryDate from "./DeliveryDate";
 import useDeliveryOption from "../../Data/useDeliveryOption";
 import dayjs from "dayjs";
-import { formatCurrency } from "../../Data/money";
 import OrderSummary from "./OrderSummary";
 import { useDispatch, useSelector } from "react-redux";
 import { updateCart,cartItemDelete } from "../../Redux/CartSlice";
+import { Link } from "react-router-dom";
 
 
 
 function Cart() {
   
-  const location = useLocation();
+ 
   const quantityElement = useRef({});
   const inputElement = useRef({});
   const {product,quantity,setQuantity} = useContext(MainContext)
@@ -62,12 +61,16 @@ function Cart() {
     <div className="cart-main">
       <div className="header">
         <div className="logo">
+        <Link to="/">
+
           <img
             src="/images/Amazon_logo - 1.svg"
             alt="Amazon Logo"
             class="amazon-header__logo-img"
           />
+          </Link>
         </div>
+        
         <div className="items">Checkout ( {quantity} items )</div>
       </div>
 

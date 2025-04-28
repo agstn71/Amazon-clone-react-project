@@ -51,10 +51,14 @@ const cartSlice = createSlice({
             if(matchingItem) {
                 matchingItem.deliveryOptionId = optionId
             }
-        }
+        },
+
+        clearCart: (state) => {
+            state.cartItem = [];
+          }
             
     }
 })
 
-export const { addToCart, updateCart, cartItemDelete,deliveryOptionChange } = cartSlice.actions;
+export const { addToCart, updateCart, cartItemDelete,deliveryOptionChange,clearCart } = cartSlice.actions;
  export default cartSlice.reducer;

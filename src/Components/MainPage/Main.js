@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import Header from '../Header/Header'
 import Product from '../ProductContainer/Product'
 import { MyContext as MainContext } from '../../Context/MyContext';
-import addToCart from '../../Data/addToCart';
+
 import { useSelector } from 'react-redux';
 
 function Main() {
