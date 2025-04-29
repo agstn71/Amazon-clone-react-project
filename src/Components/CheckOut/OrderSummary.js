@@ -57,7 +57,7 @@ console.log(orders)
   
 
   return (
-    <div>
+    <>
       <div className="order-summary">
         <div className="order-title">Order Summary</div>
         <div className="payment-summary">
@@ -86,7 +86,7 @@ console.log(orders)
           Place your order
         </button>
       </div>
-    </div>
+      </>
   );
 }
 

@@ -8,15 +8,16 @@ import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 function Orders() {
   const orders = useSelector((state) => state.orders.orderItems);
-  const {product} = useContext(MainContext);
+  const { product } = useContext(MainContext);
   const [deliveryOptions] = useDeliveryOption();
+  console.log(orders)
   return (
     <>
       <Header />
       <div className="orders-main">
         <div className="page-title">Your Orders</div>
         <div className="orders-grid">
-          {orders.map((order) => {
+          {orders.map((order, index) => {
             const orderTime = order.orderTime;
             const date = new Date(orderTime);
 
@@ -26,9 +27,9 @@ function Orders() {
 
             const formattedDate = `${monthName} ${day}`;
 
-            
+
             return (
-              <div className="orders-container">
+              <div className="orders-container" key={index}>
                 <div className="order-header">
                   <div className="order-header-left-section">
                     <div className="order-date">
@@ -46,46 +47,43 @@ function Orders() {
                   </div>
                 </div>
                 <div className="order-detail-grid">
-                 {
-                  order.products.map((orderItem) => {
-                    const matchingItem = product.find((productItem) => {
-                      return productItem.id === orderItem.id
-                    })
-                    if(matchingItem) {
-                    const matchOption = deliveryOptions.find((option) => {
-                       return orderItem.deliveryOptionId === option.id
+                  {
+                    order.products.map((orderItem, index) => {
+                      const matchingItem = product.find((productItem) => {
+                        return productItem.id === orderItem.id
                       })
-                      
-                      
-                       const today = dayjs();
-                               const deliveryDate = today.add( matchOption.deliveryDays, "days");
-                               const dateString = deliveryDate.format("  MMMM D");
-                               console.log("date consolingggggg");
-                               
-                               console.log(dateString)
+                      if (matchingItem) {
+                        const matchOption = deliveryOptions.find((option) => {
+                          return orderItem.deliveryOptionId === option.id
+                        })
 
-                       return (<> <div className="product-image-container">
-                        <img src={matchingItem.image} alt="product-image" />
-                      </div>
-                      <div className="product-detail">
-                        <div className="product-name">{matchingItem.title}</div>
-                        <div className="product-delivery-date">
-                          Arriving on:{dateString}
+
+                        const today = dayjs();
+                        const deliveryDate = today.add(matchOption.deliveryDays, "days");
+                        const dateString = deliveryDate.format("  MMMM D");
+                        console.log(dateString)
+
+                        return (<React.Fragment key={index}><div className="product-image-container">
+                          <img src={matchingItem.image} alt="product-image" />
                         </div>
-                        <div className="product-quantity">Quantity:{orderItem.quantity}</div>
-                        <button></button>
-                      </div>
-                      <div className="product-action">
-                        <Link to={`/tracking`} className="link-primary">
-                        <button>Track Package</button>
-                        </Link>
-                      </div>
-                      </>
-                      )
-                    }
-                  })
-                 
-               }
+                          <div className="product-detail">
+                            <div className="product-name">{matchingItem.title}</div>
+                            <div className="product-delivery-date">
+                              Arriving on:{dateString}
+                            </div>
+                            <div className="product-quantity">Quantity:{orderItem.quantity}</div>
+                          </div>
+                          <div className="product-action">
+                            <Link to={`/tracking?orderId=${order.id}&productId=${matchingItem.id}`} className="link-primary">
+                              <button>Track Package</button>
+                            </Link>
+                          </div>
+                        </React.Fragment>
+                        )
+                      }
+                    })
+
+                  }
                 </div>
               </div>
             );

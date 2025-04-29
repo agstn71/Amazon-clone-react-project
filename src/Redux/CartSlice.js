@@ -21,6 +21,7 @@ const cartSlice = createSlice({
                     deliveryOptionId:'1' 
                 })
             }
+            alert("added to cart")
         },
 
         updateCart: function(state,action) {

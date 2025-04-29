@@ -10,6 +10,7 @@
 
 .logo-div {
     width: 100px;
+    
 }
 
 .amazon-header__logo-img {
@@ -19,16 +20,26 @@
 
 header form {
     display: flex;
+    justify-content: center;
+    flex-grow: 1;
+    margin:0 20px;
    
 }
 header form input {
-    width:650px;
+    flex-basis:650px;
     padding:10px 0;
+    
 }
 
 header form  button {
-    width: 45px;
+    flex-basis: 45px;
 }
+
+@media (max-width:576px) {
+    header form {
+        display: none;
+    }
+} 
 
 .amazon-cart {
     display: flex;
