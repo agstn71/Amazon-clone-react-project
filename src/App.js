@@ -10,6 +10,9 @@ import { store } from "./Redux/Store";
 import Orders from "./Components/Order/Orders";
 import Tracking from "./Components/Tracking/Tracking";
 import "./App.css";
+import SignUpPage from "./Components/SignUp/SignUpPage";
+import Login from "./Components/Login/Login";
+
 
 function App() {
     const [product, setProduct] = useState([]);
@@ -27,6 +30,8 @@ function App() {
           <Route path="/checkout" element={<CheckOut/>}/>
           <Route path="/orders" element={<Orders/>}/>
           <Route path="/tracking" element={<Tracking/>}/>
+          <Route path="/login" element={<Login/>}/>
+          <Route path="/register" element={<SignUpPage/>}/>
         </Routes>
       </Router>
       </Provider>

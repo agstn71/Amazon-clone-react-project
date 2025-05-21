@@ -40,7 +40,10 @@ header form  button {
         display: none;
     }
 } 
-
+.register,.login {
+    margin-right: 10px;
+    color:white;
+}
 .amazon-cart {
     display: flex;
     justify-content: center;

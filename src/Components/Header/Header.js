@@ -1,10 +1,17 @@
 import React, { useContext } from "react";
 import "./Header.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { MyContext as MainContext } from "../../Context/MyContext";
 
 function Header() {
- const {product,cart,setCart,quantity,setQuantity,selectQuantity} =  useContext(MainContext)
+ const {product,cart,setCart,quantity,setQuantity,selectQuantity} =  useContext(MainContext);
+  const user = JSON.parse(localStorage.getItem("user"));
+    const navigate = useNavigate();
+    const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
   return (
     <div>
       <header className="amazon-header">
@@ -23,6 +30,25 @@ function Header() {
             <i className="fas fa-search"></i>
           </button>
         </form>
+        { user?
+           <>
+           <p style={{color:'white'}}>welcome, {user.name}</p>
+           <button onClick={logout}>Logout</button>
+           </>:
+        <div className="authent">
+          <div className="login">
+          <Link to="/login">
+            <span>Login</span>
+          </Link>
+        </div>
+
+        <div className="register">
+          <Link to="/register">
+            <span>SignUp</span>
+          </Link>
+        </div>
+        </div>
+      }
         <div className="amazon-cart">
           <Link to="/orders">
           <div className="rtn-ord">
