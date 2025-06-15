@@ -25,13 +25,13 @@ header form {
     margin:0 20px;
    
 }
-header form input {
+header form .header-search-input {
     flex-basis:650px;
     padding:10px 0;
     
 }
 
-header form  button {
+header form  .header-search-button {
     flex-basis: 45px;
 }
 

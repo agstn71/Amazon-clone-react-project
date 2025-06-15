@@ -1,24 +1,56 @@
 import React, { useContext, useRef } from "react";
 import "./Product.css";
-import { MyContext as  MainContext } from "../../Context/MyContext";
-import { useDispatch } from "react-redux";
+import { MyContext as MainContext } from "../../Context/MyContext";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../Redux/CartSlice";
+import { toast } from "react-toastify";
+import { addCartItemToDB } from "../../Redux/CartSlice";
+import { fetchCartFromDB } from "../../Redux/CartSlice";
+
 
 
 function Product() {
-  const {product,quantity,setQuantity} = useContext(MainContext);
+  const { product, quantity, setQuantity } = useContext(MainContext);
   const selectQuantity = useRef([]);
-  
+  const user = JSON.parse(localStorage.getItem('user'))
+
+    const cart = useSelector((state) => state.cart.cartItem);
+    
+
   const dispatch = useDispatch();
 
- const  onAddToCart = (productId,index) => {
-   const selectedQuantity = Number(selectQuantity.current[index].value);
-    dispatch(addToCart({productId,quantity:selectedQuantity}))
+
+  //add to cart
+  const onAddToCart = (productId, index) => {
+    const selectedQuantity = Number(selectQuantity.current[index].value);
+
+    const userId = user?.id
+  
+     // if userid exit
+    if (userId) {
+      dispatch(addCartItemToDB({ userId, productId, quantity: selectedQuantity }))
+        .unwrap()
+        .then(() => {
+          dispatch(fetchCartFromDB(userId));
+
+          toast.success("Item added to cart!", {
+            position: "top-right",
+            autoClose: 1000,
+            theme: "light",
+          });
+        })
+        .catch((err) => {
+          toast.error(`failed to add item cart: ${err}`);
+        });
+    } else {
+      dispatch(addToCart({ productId, quantity: selectedQuantity }));
+    }
+
   }
 
   return (
     <div>
-      <main class="product-container">
+      <main className="product-container">
         {product.map((item, index) => (
           <div key={index} className="product-card">
             <div className="product-img">
@@ -29,9 +61,8 @@ function Product() {
             </div>
             <div className="rating">
               <img
-                src={`/images/ratings/rating-${
-                  Math.round(item.rating.rate) * 10
-                }.png`}
+                src={`/images/ratings/rating-${Math.round(item.rating.rate) * 10
+                  }.png`}
                 alt="rating"
               />
               <div className="count">{item.rating.count}</div>
@@ -55,7 +86,7 @@ function Product() {
             <button
               className="add-to-cart"
               onClick={() => {
-               onAddToCart(item.id, index)
+                onAddToCart(item.id, index)
               }}
             >
               Add to Cart

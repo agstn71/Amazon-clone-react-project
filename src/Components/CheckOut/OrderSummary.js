@@ -3,9 +3,11 @@ import { MyContext as MainContext } from "../../Context/MyContext";
 import useDeliveryOption from "../../Data/useDeliveryOption";
 import { formatCurrency } from "../../Data/money";
 import { useDispatch, useSelector } from "react-redux";
-import { placeYourOrder } from "../../Redux/orderSlice";
-import { clearCart } from "../../Redux/CartSlice";
+import { placeYourOrderInDB } from "../../Redux/orderSlice";
+import { clearCartItemInDB } from "../../Redux/CartSlice";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { fetchCartFromDB } from "../../Redux/CartSlice";
 
 function OrderSummary({ quantity }) {
   const [deliveryOptions, setDeliveryOptions] = useDeliveryOption();
@@ -14,6 +16,8 @@ function OrderSummary({ quantity }) {
  const navigate = useNavigate()
   const cart = useSelector((state) => state.cart.cartItem);
   const orders = useSelector((state) => state.orders.orderItems)
+ 
+ 
     
 
   let totalPrice = 0;
@@ -48,11 +52,32 @@ console.log(orders)
   taxCents = Number((totalBeforTax * 0.1).toFixed(2));
   totalAfterTax = Number((totalBeforTax + taxCents).toFixed(2));
 
-  const handlePlaceOrder = (totalCost,cart) => {
-    dispatch(placeYourOrder({ totalCost,cart }));
-  dispatch(clearCart());
-
-  navigate("/orders")
+  const handlePlaceOrder = async (totalCost,cart) => {
+   
+    console.log("inside place order")
+    const user = JSON.parse(localStorage.getItem("user"));
+     const userId = user?.id;
+    if(!user) {
+      navigate('/login')
+      return;
+    }
+    const transformedCart = cart.map(item => ({
+    productId: item.id, 
+    quantity: item.quantity,
+     deliveryOptionId:item. deliveryOptionId
+  }));
+    try {
+      console.log(cart)
+      console.log("useri in order:",userId)
+      await dispatch( placeYourOrderInDB({ userId,totalCost,cart:transformedCart }))
+       await dispatch(clearCartItemInDB(userId))
+  await dispatch(fetchCartFromDB(userId))
+       toast.success("placed your order");
+      navigate("/orders")
+    } catch(error) {
+      toast.error(`${error}`)
+    }
+  
   }
   
 

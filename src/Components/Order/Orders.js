@@ -1,17 +1,28 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import Header from "../Header/Header";
 import "./Order.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { MyContext as MainContext } from "../../Context/MyContext";
 import useDeliveryOption from "../../Data/useDeliveryOption";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 import EmptyOrder from "./EmptyOrder";
+import { getOrdersFromDB } from "../../Redux/orderSlice";
 function Orders() {
   const orders = useSelector((state) => state.orders.orderItems);
-  const { product } = useContext(MainContext);
+   const { product} = useContext(MainContext);
   const [deliveryOptions] = useDeliveryOption();
-  console.log(orders);
+  const dispatch = useDispatch()
+  
+  useEffect(() => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userId = user?.id;
+
+  if (userId) {
+    dispatch(getOrdersFromDB(userId));
+  }
+}, [dispatch]);
+
   return (
     <>
       <Header />
@@ -24,7 +35,8 @@ function Orders() {
             {orders.map((order, index) => {
               const orderTime = order.orderTime;
               const date = new Date(orderTime);
-
+           console.log("indisdfsafdsf asldkf");
+           
               const monthName = date.toLocaleString("default", {
                 month: "long",
               });
@@ -48,15 +60,19 @@ function Orders() {
                     </div>
                     <div className="order-header-right-section">
                       <div className="order-header-label">Order ID</div>
-                      <div>{order.id}</div>
+                      <div>{order._id}</div>
                     </div>
                   </div>
                   <div className="order-detail-grid">
                     {order.products.map((orderItem, index) => {
+                       console.log("inside matching item")
+                       console.log("product ",product)
                       const matchingItem = product.find((productItem) => {
-                        return productItem.id === orderItem.id;
+                       
+                        return productItem.id === orderItem.productId;
                       });
                       if (matchingItem) {
+                        
                         const matchOption = deliveryOptions.find((option) => {
                           return orderItem.deliveryOptionId === option.id;
                         });
@@ -90,7 +106,7 @@ function Orders() {
                             </div>
                             <div className="product-action">
                               <Link
-                                to={`/tracking?orderId=${order.id}&productId=${matchingItem.id}`}
+                                to={`/tracking?orderId=${order._id}&productId=${matchingItem.id}`}
                                 className="link-primary"
                               >
                                 <button>Track Package</button>

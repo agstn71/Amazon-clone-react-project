@@ -53,7 +53,7 @@
 .form-control {
     margin-bottom:12px;
 }
-.form-control input {
+.form-control .login-input {
     width:100%;
     padding:3px 7px;
     border-radius:4px;

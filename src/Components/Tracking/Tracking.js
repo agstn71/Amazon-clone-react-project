@@ -22,14 +22,14 @@ function Tracking() {
   const orders = useSelector((state) => state.orders.orderItems);
   console.log(orders);
 
-  const matchOrder = orders.find((order) => order.id === orderId);
+  const matchOrder = orders.find((order) => order._id === orderId);
 
   console.log(matchOrder)
 
-  const matchOrderProduct = matchOrder?.products.find((product) => product.id == productId)
+  const matchOrderProduct = matchOrder?.products.find((product) => product?.productId === Number(productId))
   console.log(matchOrderProduct)
   const matchOption = deliveryOptions.find((option) => {
-    return matchOrderProduct.deliveryOptionId === option.id
+    return matchOrderProduct?.deliveryOptionId === option?.id
   })
 
   const today = dayjs();
@@ -37,9 +37,9 @@ function Tracking() {
   const dateString = deliveryDate.format("  MMMM D");
   
 
-  const matchProduct = product.find((item) => item.id === matchOrderProduct.id)
+  const matchProduct = product.find((item) => item.id === matchOrderProduct.productId)
 
-
+ console.log("matchproduct ",matchProduct)
 
 
   return (
@@ -65,7 +65,7 @@ function Tracking() {
             Quantity: {matchOrderProduct?.quantity}
           </div>
 
-          <img className="product-image" src={matchProduct?.image} />
+          <img className="product-image" src={matchProduct?.image} alt='product' />
 
           <div className="progress-labels-container">
             <div className="progress-label">

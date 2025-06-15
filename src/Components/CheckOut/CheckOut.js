@@ -6,9 +6,10 @@ import useDeliveryOption from "../../Data/useDeliveryOption";
 import dayjs from "dayjs";
 import OrderSummary from "./OrderSummary";
 import { useDispatch, useSelector } from "react-redux";
-import { updateCart, cartItemDelete } from "../../Redux/CartSlice";
+import { updateCart, cartItemDelete, updateCartItemInDB, fetchCartFromDB, deleteCartItemInDB } from "../../Redux/CartSlice";
 import { Link } from "react-router-dom";
 import EmptyCart from "./EmptyCart";
+
 
 
 
@@ -21,6 +22,8 @@ function Cart() {
   const [deliveryOptions, setDeliveryOptions] = useDeliveryOption()
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.cartItem);
+  const user = JSON.parse(localStorage.getItem('user'))
+  const userId = user?.id
 
 
 
@@ -40,12 +43,22 @@ function Cart() {
     console.log("cart updated")
   }, [cart]);
 
-  const onCartUpdate = (event, id) => {
+
+
+  //cart item update
+  const onCartUpdate = async (event, id) => {
     const quantity = Number(event.target.value);
     const productId = id;
+    if(userId) {
+     await dispatch(updateCartItemInDB({userId,productId,quantity }))
+     await dispatch(fetchCartFromDB(userId))
+  
+    }else {
     dispatch(updateCart({ productId, quantity }))
-
+    }
   }
+
+
 
   const handleSubmit = (e, id) => {
     e.preventDefault();
@@ -53,9 +66,19 @@ function Cart() {
     quantityElement.current[id].style.display = "inline";
   }
 
-  const onItemDelete = (id) => {
+  //cart item delete
+  const onItemDelete = async (id) => {
     const productId = id;
-    dispatch(cartItemDelete({ productId }))
+    if(userId) {
+      console.log("userId...",userId)
+      console.log("productId... ",productId)
+       await dispatch(deleteCartItemInDB({userId,productId}));
+        await dispatch(fetchCartFromDB(userId))
+        await dispatch(fetchCartFromDB(userId))
+    }else {
+      dispatch(cartItemDelete({ productId }))
+    }
+    
   }
 
   return (
@@ -108,11 +131,11 @@ function Cart() {
                       </div>
                       <div className="cart-item-detail">
                         <div className="item-img">
-                          <img src={matchingItem.image} alt=" product" />
+                          <img src={matchingItem?.image} alt=" product" />
                         </div>
                         <div className="item-detail">
-                          <div className="item-name">{matchingItem.title}</div>
-                          <div className="item-price">${matchingItem.price}</div>
+                          <div className="item-name">{matchingItem?.title}</div>
+                          <div className="item-price">${matchingItem?.price}</div>
                           <div className="item-quantity">
                             <span>
                               Quantity:
